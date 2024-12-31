@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>桌宠</title>
+    <style>
+        body {
+            cursor: move;
+            margin: 0;
+            overflow: hidden;
+            -webkit-user-drag: none;
+        }
+
+        #pet {
+            background-color: transparent;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            cursor: move;
+            user-select: none;
+        }
+
+        #spine{
+          background-color: transparent;
+          cursor: move;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          left: 0;
+          bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <img id="pet"></img>
+    <canvas id="spine"></canvas>
+    <script type="module" src="./index.mjs"></script>
+</body>
+
+</html>

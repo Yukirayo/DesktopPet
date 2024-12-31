@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设置</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="../../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../node_modules/animate.css/animate.min.css">
+</head>
+
+<body>
+    <div id="title" class="container title">
+        <span class="fs-5">DesktopPet | 设置</span>
+    </div>
+    <div class="container content">
+        <form class="needs-validation" novalidate>
+            <div class="mb-3 animate__animated animate__slideInLeft animate__fast">
+                <div class="btn-group" role="group" aria-describedby="mode-help" require>
+                    <input type="radio" class="btn-check" name="mode" id="mode1" data-mode="1" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="mode1">Spine</label>
+
+                    <!-- <input type="radio" class="btn-check" name="mode" id="mode2" data-mode="2" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="mode2">龙骨</label> -->
+
+                    <input type="radio" class="btn-check" name="mode" id="mode3" data-mode="3" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="mode3">图片</label>
+                </div>
+                <div id="mode-help" class="form-text">显示桌宠的方式</div>
+            </div>
+
+            <div class="mb-3 animate__animated animate__slideInLeft animate__fast">
+                <label for="spine" class="form-label">选择模型/图片</label>
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-sm select-input" required>
+                    <button type="button" class="btn btn-outline-secondary btn-sm select">浏览</button>
+                </div>
+            </div>
+
+            <div class="model-size mb-3 animate__animated animate__slideInLeft animate__fast">
+                <label class="form-label">模型大小</label>
+                <div class="d-flex flex-row mb-3" style="gap: 5px;">
+                    <span id="range-value" style="width: 32px;text-align:center;">0</span>
+                    <input type="range" class="form-range" min="0" max="1" step="0.1" style="max-width: 200px;" id="model-range" required>
+                </div>
+
+            </div>
+
+            <div class="mb-3 animate__animated animate__slideInLeft animate__fast spine-animeListDiv"
+                style="display: none;">
+                <label class="form-label">待机动画</label>
+                <select class="form-select form-select-sm animeList" id="normal-anime"
+                    style="max-width: 150px;" required></select>
+            </div>
+
+            <div class="mb-3 animate__animated animate__slideInLeft animate__fast spine-animeListDiv"
+                style="display: none;">
+                <label class="form-label">拖动动画</label>
+                <select class="form-select form-select-sm animeList" id="drag-anime" style="max-width: 150px;" required></select>
+            </div>
+            <!-- <div class="mb-3 animate__animated animate__slideInLeft animate__fast spine-animeListDiv"
+                style="display: none;">
+                <label class="form-label">走路动画</label>
+                <select class="form-select form-select-sm animeList" id="walk-anime" style="max-width: 150px;" required></select>
+            </div> -->
+            <div class="btns">
+                <button type="submit" class="btn btn-success apply">应用</button>
+                <button type="button" class="btn btn-secondary cancel">取消</button>
+            </div>
+        </form>
+        
+    </div>
+
+
+</body>
+<script src="index.mjs"></script>
+
+</html>

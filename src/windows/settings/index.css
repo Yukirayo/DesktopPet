@@ -1,0 +1,44 @@
+.btns {
+    padding-bottom: 15px;
+    padding-left: 15px;
+    position: absolute;
+    width: 100%;
+    height: auto;
+    background-color: transparent;
+    bottom: 0;
+    right: 0;
+}
+
+body {
+    user-select: none;
+    padding: 10px 20px;
+}
+
+.title {
+    background-color: white;
+    padding: 16px;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    -webkit-app-region: drag;
+    cursor: move;
+}
+
+.title span {
+    margin-left: 10px;
+}
+
+.content{
+    width: 100%;
+    padding-top: 15%;
+}
+
+.right-way{
+    margin-left: auto;
+}
+
+::-webkit-scrollbar{
+    width: 0;
+    background-color: transparent;
+}
