@@ -5,14 +5,7 @@ const main = async () => {
         ignoreMouse()
         initOptionStatus()
         setOptionStatus()
-        const { x: mouseX, y: mouseY } = await API.invoke('mousePosition')
-        const { width, height } = await API.invoke('get-options-bounds')
-        const [computedX, computedY] = [mouseX, mouseY - height]
-        API.send('set-options-bounds', {
-            x: computedX,
-            y: computedY
-        })
-        API.send('mouse-ignore', true)
+        computedPosition()
     } catch (error) {
         console.log(error.message)
     }
@@ -42,6 +35,9 @@ const setOptionStatus = () => {
             if(this.id === 'option-dev'){
                 API.send('open-option-dev')
             }
+            if(this.id === 'option-quit'){
+                API.send('quit')
+            }
 
 
         })
@@ -68,6 +64,17 @@ const initOptionStatus = async () => {
             }
         }
     })
+}
+
+const computedPosition = async () => {
+    const { x: mouseX, y: mouseY } = await API.invoke('mousePosition')
+    const { height } = await API.invoke('get-options-bounds')
+    const [computedX, computedY] = [mouseX, mouseY - height]
+    API.send('set-options-bounds', {
+        x: computedX,
+        y: computedY
+    })
+    API.send('mouse-ignore', true)
 }
 
 main()

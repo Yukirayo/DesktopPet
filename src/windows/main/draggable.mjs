@@ -1,31 +1,49 @@
 import { elementStyleById } from '../../tools/elementHandler.mjs'
-
-let isLock = false
-let isFollow = false
-
-window.api.on('option-lock', (event,bool) => {
-    isLock = bool
-    console.log('lock')
-    window.api.send('setStore',{
-        name: 'isLock',
-        value: bool
-    })
-})
-
-window.api.on('option-follow', (event,bool) => {
-    isFollow = bool
-    console.log('follow')
-    window.api.send('setStore',{
-        name: 'isFollow',
-        value: bool
-    })
-})
+let store
+let isLock
+let isFollow
 
 const main = async () => {
-    const pet = document.querySelector('#pet')
-    const API = window.api
-    const store = await API.invoke('getStore')
-    initPosition(store)
+    try {
+        const pet = document.querySelector('#pet')
+        const API = window.api
+        ipcMethod(API)
+        store = await window.api.invoke('getStore')
+        isLock = store.isLock
+        isFollow = store.isFollow
+        initPosition(store)
+        modeToggle()
+        eventListener(API)
+
+    } catch (error) {
+        API.send('log', error.message)
+    }
+
+}
+
+const ipcMethod = async (API) => {
+    try {
+        await API.on('option-lock', async (event, bool) => {
+            isLock = bool
+            await API.send('setStore', {
+                name: 'isLock',
+                value: bool
+            })
+        })
+        
+        await API.on('option-follow', async (event, bool) => {
+            isFollow = bool
+            await API.send('setStore', {
+                name: 'isFollow',
+                value: bool
+            })
+        })
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+const modeToggle =() => {
     if (store.mode.image) {
         elementStyleById([
             ["pet", "display", "block"],
@@ -38,9 +56,10 @@ const main = async () => {
             ["spine", "display", "block"]
         ])
     }
+}
 
+const eventListener = async (API) => {
     try {
-
         const [taskBarX, taskBarHeight] = await API.invoke('get-taskbar')
         let isDrag = false
         let isMove = false
@@ -84,28 +103,24 @@ const main = async () => {
                 isDrag = false
                 let bounds = {
                     x: newX,
-                    y: newY,
-                    width: originWidth,
-                    height: originHeight,
+                    y: newY
                 }
                 if (newY + originHeight > taskBarX) {
                     newY = taskBarX - originHeight
                     bounds = {
                         x: newX,
-                        y: newY,
-                        width: originWidth,
-                        height: originHeight,
+                        y: newY
                     }
                     API.send('set-bounds', bounds)
                 }
-                API.send('setStore',{ name: 'lastPosition', value: bounds })
+                API.send('setStore', { name: 'lastPosition', value: bounds })
                 if (store.mode.spine) {
                     isMove = false
                     window.tools.setModelAnime(0, store.spineSelectedAnime[0], true)
                 }
                 window.removeEventListener('mousemove', handleMouseMove)
                 window.removeEventListener('mouseleave', handelMouseLeave)
-            } else {
+            } else if (event.button === 2) {
                 API.send('open-options')
             }
         }
@@ -122,13 +137,16 @@ const main = async () => {
         window.addEventListener('mouseleave', handelMouseLeave)
         window.addEventListener('mouseup', handelMouseUp)
     } catch (error) {
-        API.send('log', error.message)
+        console.log(error.message)
     }
-
 }
 
 const initPosition = async (store) => {
-    window.api.send('set-bounds', store.lastPosition)
+    try {
+        window.api.send('set-bounds', store.lastPosition)
+    } catch (error) {
+        console.log(error.message)
+    }
 }
 
 export default main

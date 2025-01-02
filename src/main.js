@@ -69,7 +69,7 @@ const initMainWindow = async () => {
 
     mainWindow.loadFile(path.join(__dirname, 'windows/main/index.html'))
     mainWindow.setSkipTaskbar(true)
-    mainWindow.webContents.openDevTools()
+    // mainWindow.webContents.openDevTools()
     mainWindow.once('ready-to-show', () => {
         mainWindow.show()
     })
@@ -131,15 +131,19 @@ const initOptionsWindow = () => {
     optionWin.on('closed', () => {
         optionWin = null
     })
-    // optionWin.on('blur',() => {
-    //     optionWin.close()
-    // })
+    optionWin.on('blur',() => {
+        optionWin.close()
+    })
     optionWin.once('ready-to-show', () => {
         optionWin.show()
     })
 }
 
 const ipcList = () => {
+    ipcMain.on('quit', () => {
+        quit()
+    })
+
     ipcMain.on('log', (event, message) => {
         console.log(`[RendererLog] => ${message}`)
     })
@@ -223,11 +227,7 @@ const ipcList = () => {
     })
 
     ipcMain.on('reload-main', async () => {
-        if (checkInitStore()) {
-            store.set('isInit', true)
-        }
-        mainWindow.hide()
-        mainWindow.webContents.reload()
+        reloadMain()
     })
 
     ipcMain.on('open-settings', openSettings)
@@ -271,6 +271,14 @@ const ipcList = () => {
     })
 }
 
+const reloadMain = () => {
+    if (checkInitStore()) {
+        store.set('isInit', true)
+    }
+    mainWindow.hide()
+    mainWindow.webContents.reload()
+}
+
 const openSettings = () => {
     if (!selectWin) {
         initSettingsWindow()
@@ -297,6 +305,12 @@ const loadMenu = async () => {
                 openSettings()
             }
         },
+        // {
+        //     label: "重载main",
+        //     click: () => {
+        //         reloadMain()
+        //     }
+        // },
         {
             type: "separator"
         },

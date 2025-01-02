@@ -14,12 +14,10 @@ let animeArr
 const main = async () => {
     try {
         store = await window.api.invoke('getStore')
-        // document.querySelector(".apply").addEventListener('click', applyOptions)
         document.querySelector(".select").addEventListener('click', selectFile)
         document.querySelector('.cancel').addEventListener('click', cancelOptions)
         updateRange()
         validateForm()
-        // enableDrag()
         pathType(store.mode)
         checkMode(store.mode)
         await handleModeClick()
@@ -57,9 +55,7 @@ const pathType = async (mode) => {
     try {
         if (mode.spine) {
             modelPath = store.spinePath || ''
-        } else if (mode.dragon) {
-            modelPath = store.dragonPath || ''
-        } else if (mode.image) {
+        }else if (mode.image) {
             modelPath = store.imagePath || ''
         } else {
             modelPath = ''
@@ -77,19 +73,16 @@ const handleModeClick = async () => {
         switch (option) {
             case "1":
                 mode = { spine: true, dragon: false, image: false }
-                // modelPath = store.spinePath
                 await updateAnimeList()
                 modelSize.style.display = 'block'
                 break
             case "2":
                 mode = { spine: false, dragon: true, image: false }
-                // modelPath = store.dragonPath
                 modelSize.style.display = 'none'
                 document.querySelectorAll('.spine-animeListDiv').forEach(item => item.style.display = 'none')
                 break
             case "3":
                 mode = { spine: false, dragon: false, image: true }
-                // modelPath = store.imagePath
                 modelSize.style.display = 'none'
                 document.querySelectorAll('.spine-animeListDiv').forEach(item => item.style.display = 'none')
                 break
@@ -97,7 +90,6 @@ const handleModeClick = async () => {
                 mode = { spine: true, dragon: false, image: false }
                 modelSize.style.display = 'block'
                 document.querySelectorAll('.spine-animeListDiv').forEach(item => item.style.display = 'block')
-            // modelPath = store.spinePath
         }
         pathType(mode)
     } catch (error) {
@@ -113,7 +105,6 @@ const submitMode = async () => {
         window.api.send('setStore', { name: 'modelSize', value: modelRange.value })
         window.api.send('setStore', { name: 'spineSelectedAnime', value: animeArr })
         window.api.send('setStore', { name: "mode", value: mode })
-        // window.api.invoke('getStore').then(res=>console.log(res))
     } catch (error) {
         console.log(error.message)
     }
@@ -147,13 +138,10 @@ const checkMode = async (mode, path) => {
     try {
         if (mode.spine) {
             await changeMode("mode1")
-            // modelPath = path || ''
         } else if (mode.dragon) {
             await changeMode("mode2")
-            // modelPath = path || ''
         } else if (mode.image) {
             await changeMode("mode3")
-            // modelPath = path || ''
         } else {
             console.log("error")
         }
@@ -216,15 +204,7 @@ const updateAnimeList = async (mustInsert) => {
         const animeListSelect = document.querySelectorAll('.animeList')
 
         animeListDiv.forEach(item => item.style.display = 'block')
-        // saveSelectedAnime(animeListSelect)
         animeListSelect.forEach(select => {
-            // select.addEventListener('change', async (e) => {
-            //     if (select.id === "normal-anime") {
-            //         animeArr[0] = e.target.value
-            //     } else if (select.id === "drag-anime") {
-            //         animeArr[1] = e.target.value
-            //     }
-            // })
             if (select.children.length === 0 || mustInsert) {
                 if (mustInsert) {
                     select.innerHTML = ''
@@ -302,51 +282,3 @@ const applyOptions = async () => {
         console.log(error.message)
     }
 }
-
-// const enableDrag = async () => {
-//     try {
-//         let startX, startY, newX, newY, originHeight, originWidth = 0
-//         let isDrag
-
-//         API.invoke('get-settings-bounds').then(bounds => {
-//             [ originHeight, originWidth ] = [ bounds.height, bounds.width ]
-//         })
-
-//         async function handleMouseDown(event) {
-//             isDrag = true
-//             API.invoke('get-settings-bounds').then(bounds => {
-//                 [startX, startY] = [event.screenX - bounds.x, event.screenY - bounds.y]
-//             })
-//             settings.addEventListener('mousemove', handleMouseMove)
-//         }
-
-//         async function handleMouseMove(event) {
-//             if (isDrag) {
-//                 [newX, newY] = [event.screenX - startX, event.screenY - startY]
-//                 API.send('set-settings-bounds', {
-//                     height: originHeight,
-//                     width: originWidth,
-//                     x: newX,
-//                     y: newY
-//                 })
-//             }
-//         }
-
-//         async function handleMouseUp(event) {
-//             isDrag = false
-//             settings.addEventListener('mouseleave', handleMouseLeave)
-//             settings.addEventListener('mousemove', handleMouseMove)
-//         }
-
-//         function handleMouseLeave() {
-//             isDrag = false
-//         }
-
-//         settings.addEventListener('mousedown', handleMouseDown)
-//         settings.addEventListener('mouseleave', handleMouseLeave)
-//         settings.addEventListener('mouseup', handleMouseUp)
-
-//     } catch (error) {
-//         console.log(error.message)
-//     }
-// }
